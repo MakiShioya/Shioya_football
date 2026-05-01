@@ -414,7 +414,9 @@ async function loadMatches() {
     const japaneseFilter = document.getElementById('japanese-filter'); // 追加
     
     try {
-        const response = await fetch('/api/matches');
+        // ▼ 変更箇所：現在表示中の日付文字列を取得し、URLにくっつけて送信する
+        const dateStr = getFormattedDateForAPI();
+        const response = await fetch(`/api/matches?date=${dateStr}`);
         const data = await response.json();
         
         if (!data.status || !data.response.matches) {
