@@ -46,7 +46,7 @@ const LEAGUE_MASTERS = {
         "Luton", "Middlesbrough", "Millwall", "Norwich", "Oxford", 
         "Plymouth", "Portsmouth", "Preston", "QPR", "Sheffield United", 
         "Sheffield Wednesday", "Stoke", "Sunderland", "Swansea", "Watford", 
-        "West Bromwich Albion", "Bristol City", "Hull City", "Southampton", "Cardiff"
+        "West Bromwich Albion", "Bristol City", "Hull City", "Southampton", "Cardiff", "Birmingham"
     ],
     // 7. ベルギー1部
     "belgium": [
@@ -74,6 +74,10 @@ const LEAGUE_MASTERS = {
         "Gamba Osaka", "Jubilo Iwata", "Kashima Antlers", "Kashiwa Reysol", "Kawasaki Frontale", 
         "Kyoto Sanga", "Machida Zelvia", "Nagoya Grampus", "Sagan Tosu", "Sanfrecce Hiroshima", 
         "Shonan Bellmare", "Tokyo Verdy", "Urawa Red Diamonds", "Vissel Kobe", "Yokohama F. Marinos"
+    ],
+    "ex": [
+        "Bochum", "Fortuna Düsseldorf", "Darmstadt", "Hannover", "Karlsruhe", 
+        "Preußen Münster", "Real Sociedad B", "Celtic"
     ]
 };
 
