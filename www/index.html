@@ -78,31 +78,40 @@
             margin-bottom: 15px;
         }
 
-        .date-nav {
+        /* ▼▼ 日付切り替え用 3タブのスタイル ▼▼ */
+        .tab-container {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             margin-bottom: 15px;
+            background: #ECDBBF;
+            border-radius: 10px;
+            border: 2px solid #8b4513;
+            overflow: hidden;
         }
 
-        .date-btn {
-            padding: 8px 16px;
-            border: 2px solid #8b4513;
-            border-radius: 8px;
+        .tab-btn {
+            flex: 1;
+            padding: 10px 0;
+            border: none;
+            background: transparent;
+            color: #8b4513;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .tab-btn:not(:last-child) {
+            border-right: 2px solid #8b4513;
+        }
+
+        /* 選択されているタブの見た目 */
+        .tab-btn.active {
             background: linear-gradient(to bottom, #ff9800, #f57c00);
             color: #fff;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             text-shadow: 1px 1px 2px #432517;
         }
-        .date-btn:active { transform: scale(0.95); }
-
-        .date-display {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #432517;
-        }
+        /* ▲▲ タブスタイルここまで ▲▲ */
 
         .toggle-label {
             display: inline-flex;
@@ -189,11 +198,13 @@
             </optgroup>
         </select>
 
-        <div class="date-nav">
-            <button id="prev-date-btn" class="date-btn">◀ 前日</button>
-            <div id="date-display" class="date-display">YYYY年MM月DD日</div>
-            <button id="next-date-btn" class="date-btn">翌日 ▶</button>
+        <!-- ▼▼ 日付ナビゲーションを3タブに変更 ▼▼ -->
+        <div class="tab-container">
+            <button id="tab-yesterday" class="tab-btn" onclick="selectTab(-1, 'tab-yesterday')">昨日</button>
+            <button id="tab-today" class="tab-btn" onclick="selectTab(0, 'tab-today')">今日</button>
+            <button id="tab-tomorrow" class="tab-btn" onclick="selectTab(1, 'tab-tomorrow')">明日</button>
         </div>
+        <!-- ▲▲ タブ変更ここまで ▲▲ -->
 
         <label class="toggle-label">
             <input type="checkbox" id="japanese-filter" checked style="margin-right: 8px; transform: scale(1.2);">
