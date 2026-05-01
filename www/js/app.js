@@ -379,13 +379,7 @@ const JAPANESE_PLAYERS = {
 
 let allMatches = [];
 let targetDate = new Date();
-
-function updateDateUI() {
-    const y = targetDate.getFullYear();
-    const m = targetDate.getMonth() + 1;
-    const d = targetDate.getDate();
-    document.getElementById('date-display').innerText = `${y}年${m}月${d}日`;
-}
+const TODAY = new Date(); // 基準となる「今日」を固定で持っておく
 
 function getFormattedDateForAPI() {
     // API送信用に YYYYMMDD 形式を作成
@@ -395,19 +389,20 @@ function getFormattedDateForAPI() {
     return `${y}${m}${d}`;
 }
 
-// 前日ボタンの処理
-document.getElementById('prev-date-btn').addEventListener('click', () => {
-    targetDate.setDate(targetDate.getDate() - 1);
-    updateDateUI();
-    loadMatches(); // 日付を変えたら再取得
-});
+// ▼▼ 新規追加：タブ切り替え処理 ▼▼
+function selectTab(offset, tabId) {
+    // 1. すべてのタブから active クラスを外し、押されたタブにだけ付与する
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
 
-// 翌日ボタンの処理
-document.getElementById('next-date-btn').addEventListener('click', () => {
-    targetDate.setDate(targetDate.getDate() + 1);
-    updateDateUI();
-    loadMatches(); // 日付を変えたら再取得
-});
+    // 2. 「今日」を基準にして、オフセット（-1, 0, 1）を足して targetDate を計算
+    targetDate = new Date(TODAY);
+    targetDate.setDate(TODAY.getDate() + offset);
+
+    // 3. 新しい日付でAPIを叩く
+    loadMatches();
+}
+// ▲▲ 新規追加ここまで ▲▲
 
 async function loadMatches() {
     const container = document.getElementById('match-list');
@@ -526,11 +521,7 @@ function renderMatches() {
         `;
     }).join('');
 }
-
 window.addEventListener('DOMContentLoaded', () => {
-    // 1. 画面が開かれた瞬間に「YYYY年MM月DD日」を今日の日付で上書きする
-    updateDateUI();
-    
-    // 2. その日付を使ってAPIから試合データを取得する
-    loadMatches();
+    // 画面が開かれた瞬間に「今日」タブを選択し、自動でデータ取得を走らせる
+    selectTab(0, 'tab-today');
 });
