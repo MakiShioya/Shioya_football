@@ -415,7 +415,7 @@ async function loadMatches() {
 function renderMatches() {
     const container = document.getElementById('match-list');
     const selectedLeague = document.getElementById('league-filter').value;
-    const isJapaneseOnly = document.getElementById('japanese-filter').checked; // チェック状態を取得
+    const isJapaneseOnly = document.getElementById('japanese-filter').checked;
     
     // 1. リーグによる絞り込みの準備
     let targetTeams = [];
@@ -429,18 +429,16 @@ function renderMatches() {
 
     // 2. フィルタリングの実行
     const filtered = allMatches.filter(match => {
-        // 条件A: 選んだリーグのチームが含まれているか
         const inTargetLeague = targetTeams.includes(match.home.name) || targetTeams.includes(match.away.name);
         if (!inTargetLeague) return false;
 
-        // 条件B: 「日本人所属のみ」がONの場合、JAPANESE_PLAYERSに登録があるか
         if (isJapaneseOnly) {
             const hasJapaneseHome = JAPANESE_PLAYERS[match.home.name] !== undefined;
             const hasJapaneseAway = JAPANESE_PLAYERS[match.away.name] !== undefined;
             return hasJapaneseHome || hasJapaneseAway;
         }
 
-        return true; // OFFの場合はリーグ条件だけで通過
+        return true;
     });
 
     if (filtered.length === 0) {
@@ -448,21 +446,34 @@ function renderMatches() {
         return;
     }
 
-    // 3. 画面への描画（選手名バッジの追加）
+    // 3. 画面への描画
     container.innerHTML = filtered.map(match => {
+        // ▼▼ A. 日本時間への変換処理 ▼▼
+        // timeTS（絶対時間）を元に、確実に「Asia/Tokyo（日本時間）」としてフォーマットします
+        const dateObj = new Date(match.timeTS);
+        const jstTimeStr = new Intl.DateTimeFormat('ja-JP', {
+            timeZone: 'Asia/Tokyo',
+            month: 'numeric',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }).format(dateObj); // 例: "5/1 04:00"
+
+        // ▼▼ B. チーム名の略称＋日本語化処理 ▼▼
+        // TEAM_DISPLAYSに登録があれば変換し、なければAPIの元の英語名をそのまま表示します
+        const displayHomeName = TEAM_DISPLAYS[match.home.name] || match.home.name;
+        const displayAwayName = TEAM_DISPLAYS[match.away.name] || match.away.name;
+
+        // ▼▼ C. 日本人所属バッジの生成 ▼▼
         const homePlayers = JAPANESE_PLAYERS[match.home.name] ? JAPANESE_PLAYERS[match.home.name].join(', ') : '';
         const awayPlayers = JAPANESE_PLAYERS[match.away.name] ? JAPANESE_PLAYERS[match.away.name].join(', ') : '';
 
         const homeBadge = homePlayers ? `<div style="font-size: 0.75em; color: white; background: #0046A7; padding: 3px 8px; border-radius: 10px; margin-top: 8px; display: inline-block;">🇯🇵 ${homePlayers}</div>` : '';
         const awayBadge = awayPlayers ? `<div style="font-size: 0.75em; color: white; background: #0046A7; padding: 3px 8px; border-radius: 10px; margin-top: 8px; display: inline-block;">🇯🇵 ${awayPlayers}</div>` : '';
 
-        // ▼ 辞書に登録があれば変換し、なければ元の英語名を使う ▼
-        const displayHomeName = TEAM_DISPLAYS[match.home.name] || match.home.name;
-        const displayAwayName = TEAM_DISPLAYS[match.away.name] || match.away.name;
-
         return `
             <div style="border: 1px solid #eee; padding: 20px; margin: 15px; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                <div style="font-size: 0.8em; color: #999; margin-bottom: 10px; text-align: center;">${match.time} (現地)</div>
+                <div style="font-size: 0.8em; color: #999; margin-bottom: 10px; text-align: center;">${jstTimeStr} (日本時間)</div>
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div style="width: 40%; text-align: center;">
                         <div style="font-weight: bold; font-size: 0.9em;">${displayHomeName}</div>
