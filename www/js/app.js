@@ -377,6 +377,36 @@ const JAPANESE_PLAYERS = {
 };
 
 let allMatches = [];
+let targetDate = new Date();
+
+function updateDateUI() {
+    const y = targetDate.getFullYear();
+    const m = targetDate.getMonth() + 1;
+    const d = targetDate.getDate();
+    document.getElementById('date-display').innerText = `${y}年${m}月${d}日`;
+}
+
+function getFormattedDateForAPI() {
+    // API送信用に YYYYMMDD 形式を作成
+    const y = targetDate.getFullYear();
+    const m = String(targetDate.getMonth() + 1).padStart(2, '0');
+    const d = String(targetDate.getDate()).padStart(2, '0');
+    return `${y}${m}${d}`;
+}
+
+// 前日ボタンの処理
+document.getElementById('prev-date-btn').addEventListener('click', () => {
+    targetDate.setDate(targetDate.getDate() - 1);
+    updateDateUI();
+    loadMatches(); // 日付を変えたら再取得
+});
+
+// 翌日ボタンの処理
+document.getElementById('next-date-btn').addEventListener('click', () => {
+    targetDate.setDate(targetDate.getDate() + 1);
+    updateDateUI();
+    loadMatches(); // 日付を変えたら再取得
+});
 
 async function loadMatches() {
     const container = document.getElementById('match-list');
