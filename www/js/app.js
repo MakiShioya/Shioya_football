@@ -1,33 +1,80 @@
 /**
- * LEAGUE_MASTERS: 14リーグの全チーム名をここに格納します。
- * APIの「Get Teams All List by League ID」で確認した名前を正確に入力してください。
+ * LEAGUE_MASTERS: 指定された10リーグのチーム名を格納
+ * ※一般的な英語/ローマ字表記です。表示されない場合はコンソールのログを確認し、
+ * APIが実際に吐き出している名前に書き換えてください。
  */
 const LEAGUE_MASTERS = {
-    "bundesliga": [
-    "Bayern München",
-    "Borussia Dortmund",
-    "RB Leipzig",
-    "VfB Stuttgart",
-    "Hoffenheim",
-    "Bayer Leverkusen",
-    "Eintracht Frankfurt",
-    "Freiburg",
-    "Augsburg",
-    "Mainz 05",
-    "Borussia Mönchengladbach",
-    "Werder Bremen",
-    "Union Berlin",
-    "1. FC Köln",
-    "Hamburger SV",
-    "St. Pauli",
-    "Wolfsburg",
-    "FC Heidenheim"
-],
+    // 1. イングランド1部
     "premier_league": [
-        "Arsenal", "Liverpool", "Brighton", "Crystal Palace"
-        // ここにプレミアリーグの全20チームを登録します
+        "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton", 
+        "Chelsea", "Crystal Palace", "Everton", "Fulham", "Ipswich", 
+        "Leicester", "Liverpool", "Manchester City", "Manchester United", 
+        "Newcastle United", "Nottingham Forest", "Southampton", "Tottenham Hotspur", 
+        "West Ham United", "Wolverhampton"
     ],
- 
+    // 2. スペイン1部
+    "laliga": [
+        "Alaves", "Athletic Club", "Atletico Madrid", "Barcelona", "Celta Vigo", 
+        "Espanyol", "Getafe", "Gironina", "Las Palmas", "Leganes", 
+        "Mallorca", "Osasuna", "Rayo Vallecano", "Real Betis", "Real Madrid", 
+        "Real Sociedad", "Sevilla", "Valencia", "Valladolid", "Villarreal"
+    ],
+    // 3. ドイツ1部（確定版）
+    "bundesliga": [
+        "Bayern München", "Borussia Dortmund", "RB Leipzig", "VfB Stuttgart", "Hoffenheim", 
+        "Bayer Leverkusen", "Eintracht Frankfurt", "Freiburg", "Augsburg", "Mainz 05", 
+        "Borussia Mönchengladbach", "Werder Bremen", "Union Berlin", "1. FC Köln", 
+        "Hamburger SV", "St. Pauli", "Wolfsburg", "FC Heidenheim"
+    ],
+    // 4. イタリア1部
+    "serie_a": [
+        "Atalanta", "Bologna", "Cagliari", "Como", "Empoli", 
+        "Fiorentina", "Genoa", "Inter", "Juventus", "Lazio", 
+        "Lecce", "Milan", "Monza", "Napoli", "Parma", 
+        "Roma", "Torino", "Udinese", "Venezia", "Verona"
+    ],
+    // 5. フランス1部
+    "ligue_1": [
+        "Angers", "Auxerre", "Brest", "Le Havre", "Lens", 
+        "Lille", "Lyon", "Marseille", "Monaco", "Montpellier", 
+        "Nantes", "Nice", "PSG", "Reims", "Rennes", 
+        "Saint-Etienne", "Strasbourg", "Toulouse"
+    ],
+    // 6. イングランド2部
+    "championship": [
+        "Blackburn", "Burnley", "Coventry", "Derby", "Leeds", 
+        "Luton", "Middlesbrough", "Millwall", "Norwich", "Oxford", 
+        "Plymouth", "Portsmouth", "Preston", "QPR", "Sheffield United", 
+        "Sheffield Wednesday", "Stoke", "Sunderland", "Swansea", "Watford", 
+        "West Bromwich Albion", "Bristol City", "Hull City", "Cardiff"
+    ],
+    // 7. ベルギー1部
+    "belgium": [
+        "Anderlecht", "Antwerp", "Cercle Brugge", "Charleroi", "Club Brugge", 
+        "Dender", "Genk", "Gent", "Kortrijk", "KV Mechelen", 
+        "OH Leuven", "Sint-Truiden", "Standard Liege", "Union SG", "Westerlo", "Zulte Waregem"
+    ],
+    // 8. ポルトガル1部
+    "portugal": [
+        "Benfica", "Boavista", "Braga", "Casa Pia", "Estoril", 
+        "Estrela da Amadora", "Famalicao", "Farense", "FC Porto", "Gil Vicente", 
+        "Moreirense", "Nacional", "Rio Ave", "Santa Clara", "Sporting CP", 
+        "Vitoria de Guimaraes", "AVS", "Arouca"
+    ],
+    // 9. オランダ1部
+    "netherlands": [
+        "Ajax", "Almere City", "AZ Alkmaar", "Feyenoord", "Fortuna Sittard", 
+        "Go Ahead Eagles", "Groningen", "Heerenveen", "Heracles", "NAC Breda", 
+        "NEC Nijmegen", "PEC Zwolle", "PSV Eindhoven", "RKC Waalwijk", "Sparta Rotterdam", 
+        "Twente", "Utrecht", "Willem II"
+    ],
+    // 10. 日本 J1リーグ
+    "j_league": [
+        "Albirex Niigata", "Avispa Fukuoka", "Cerezo Osaka", "Consadole Sapporo", "FC Tokyo", 
+        "Gamba Osaka", "Jubilo Iwata", "Kashima Antlers", "Kashiwa Reysol", "Kawasaki Frontale", 
+        "Kyoto Sanga", "Machida Zelvia", "Nagoya Grampus", "Sagan Tosu", "Sanfrecce Hiroshima", 
+        "Shonan Bellmare", "Tokyo Verdy", "Urawa Red Diamonds", "Vissel Kobe", "Yokohama F. Marinos"
+    ]
 };
 
 let allMatches = []; // APIから取得した生データを保持
@@ -47,21 +94,15 @@ async function loadMatches() {
 
         allMatches = data.response.matches;
 
-
-
+        // ▼▼ デバッグ用ログ：表示漏れがあったらここで実際のスペルを確認 ▼▼
         console.log("--- 今日の試合データ構造の確認 ---");
         if (allMatches.length > 0) {
-            // まず1件目の試合データの中身を「全て」出力し、リーグIDの項目名を探します
-            console.log("1試合目の全データ:", allMatches[0]); 
-            
             console.log("--- 本日の全試合リスト ---");
             allMatches.forEach(match => {
-                // 試合のカードと、その試合オブジェクトの中身を出力します
                 console.log(`${match.home.name} vs ${match.away.name}`, match);
             });
         }
-
-        
+        // ▲▲ ここまで ▲▲
 
         // セレクトボックスが変更されたら表示を更新する設定
         filter.addEventListener('change', renderMatches);
