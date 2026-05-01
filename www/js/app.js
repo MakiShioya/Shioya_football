@@ -379,66 +379,61 @@ const JAPANESE_PLAYERS = {
 
 let allMatches = [];
 let targetDate = new Date();
-const TODAY = new Date(); // 基準となる「今日」を固定で持っておく
+const TODAY = new Date(); // 基準となる「今日」を固定
+
+// 具体的な日付表示（YYYY年MM月DD日）を更新する関数
+function updateDateUI() {
+    const y = targetDate.getFullYear();
+    const m = targetDate.getMonth() + 1;
+    const d = targetDate.getDate();
+    const displayEl = document.getElementById('date-display');
+    if (displayEl) {
+        displayEl.innerText = `${y}年${m}月${d}日`;
+    }
+}
 
 function getFormattedDateForAPI() {
-    // API送信用に YYYYMMDD 形式を作成
     const y = targetDate.getFullYear();
     const m = String(targetDate.getMonth() + 1).padStart(2, '0');
     const d = String(targetDate.getDate()).padStart(2, '0');
     return `${y}${m}${d}`;
 }
 
-// ▼▼ 新規追加：タブ切り替え処理 ▼▼
+// タブ切り替え処理
 function selectTab(offset, tabId) {
-    // 1. すべてのタブから active クラスを外し、押されたタブにだけ付与する
+    // 1. タブのハイライト切り替え
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
 
-    // 2. 「今日」を基準にして、オフセット（-1, 0, 1）を足して targetDate を計算
+    // 2. 日付の計算
     targetDate = new Date(TODAY);
     targetDate.setDate(TODAY.getDate() + offset);
 
-    // 3. 新しい日付でAPIを叩く
+    // 3. UIの日付テキスト更新とデータ取得
+    updateDateUI();
     loadMatches();
 }
-// ▲▲ 新規追加ここまで ▲▲
 
 async function loadMatches() {
     const container = document.getElementById('match-list');
-    const leagueFilter = document.getElementById('league-filter');
-    const japaneseFilter = document.getElementById('japanese-filter'); // 追加
-
     container.innerHTML = '<p style="text-align: center; color: #ECDBBF; margin-top: 40px; font-size: 1.1rem; font-weight: bold;">試合情報を読み込み中...</p>';
     
     try {
-        // ▼ 変更箇所：現在表示中の日付文字列を取得し、URLにくっつけて送信する
         const dateStr = getFormattedDateForAPI();
         const response = await fetch(`/api/matches?date=${dateStr}`);
         const data = await response.json();
         
         if (!data.status || !data.response.matches) {
-            container.innerHTML = '<p>試合データがありません。</p>';
+            container.innerHTML = '<p style="text-align:center; padding: 40px; color: #888;">試合データがありません。</p>';
             return;
         }
 
         allMatches = data.response.matches;
-        if (allMatches && allMatches.length > 0) {
-            console.log("◆1試合目の全データ:", JSON.stringify(allMatches[0], null, 2));
-        } else {
-            console.log("◆現在、allMatchesが空です（試合がありません）");
-        }
-
-        // リスナーの登録（切り替え時に再描画されるようにする）
-        leagueFilter.addEventListener('change', renderMatches);
-        japaneseFilter.addEventListener('change', renderMatches); // 追加
-
-        // 初回表示
         renderMatches();
 
     } catch (error) {
         console.error('Display Error:', error);
-        container.innerHTML = '<p>データの取得に失敗しました。</p>';
+        container.innerHTML = '<p style="text-align:center; color: red; padding: 40px;">データの取得に失敗しました。</p>';
     }
 }
 
@@ -447,7 +442,6 @@ function renderMatches() {
     const selectedLeague = document.getElementById('league-filter').value;
     const isJapaneseOnly = document.getElementById('japanese-filter').checked;
     
-    // 1. リーグによる絞り込みの準備
     let targetTeams = [];
     if (selectedLeague === "all") {
         Object.values(LEAGUE_MASTERS).forEach(teams => {
@@ -457,7 +451,6 @@ function renderMatches() {
         targetTeams = LEAGUE_MASTERS[selectedLeague] || [];
     }
 
-    // 2. フィルタリングの実行
     const filtered = allMatches.filter(match => {
         const inTargetLeague = targetTeams.includes(match.home.name) || targetTeams.includes(match.away.name);
         if (!inTargetLeague) return false;
@@ -467,7 +460,6 @@ function renderMatches() {
             const hasJapaneseAway = JAPANESE_PLAYERS[match.away.name] !== undefined;
             return hasJapaneseHome || hasJapaneseAway;
         }
-
         return true;
     });
 
@@ -476,25 +468,17 @@ function renderMatches() {
         return;
     }
 
-    // 3. 画面への描画
     container.innerHTML = filtered.map(match => {
-        // ▼▼ A. 日本時間への変換処理 ▼▼
-        // timeTS（絶対時間）を元に、確実に「Asia/Tokyo（日本時間）」としてフォーマットします
         const dateObj = new Date(match.timeTS);
         const jstTimeStr = new Intl.DateTimeFormat('ja-JP', {
             timeZone: 'Asia/Tokyo',
-            month: 'numeric',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        }).format(dateObj); // 例: "5/1 04:00"
+            month: 'numeric', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        }).format(dateObj);
 
-        // ▼▼ B. チーム名の略称＋日本語化処理 ▼▼
-        // TEAM_DISPLAYSに登録があれば変換し、なければAPIの元の英語名をそのまま表示します
         const displayHomeName = TEAM_DISPLAYS[match.home.name] || match.home.name;
         const displayAwayName = TEAM_DISPLAYS[match.away.name] || match.away.name;
 
-        // ▼▼ C. 日本人所属バッジの生成 ▼▼
         const homePlayers = JAPANESE_PLAYERS[match.home.name] ? JAPANESE_PLAYERS[match.home.name].join(', ') : '';
         const awayPlayers = JAPANESE_PLAYERS[match.away.name] ? JAPANESE_PLAYERS[match.away.name].join(', ') : '';
 
@@ -510,7 +494,7 @@ function renderMatches() {
                         ${homeBadge}
                     </div>
                     <div style="width: 20%; text-align: center; font-size: 1.3em; font-weight: 900; margin-top: 5px; color: #432517;">
-                        ${match.home.score} - ${match.away.score}
+                        VS
                     </div>
                     <div style="width: 40%; text-align: center;">
                         <div style="font-weight: bold; font-size: 1rem;">${displayAwayName}</div>
@@ -521,7 +505,13 @@ function renderMatches() {
         `;
     }).join('');
 }
+
+// 初期化処理
 window.addEventListener('DOMContentLoaded', () => {
-    // 画面が開かれた瞬間に「今日」タブを選択し、自動でデータ取得を走らせる
+    // フィルターの変更イベントを1回だけ登録
+    document.getElementById('league-filter').addEventListener('change', renderMatches);
+    document.getElementById('japanese-filter').addEventListener('change', renderMatches);
+
+    // 「今日」を選択して開始
     selectTab(0, 'tab-today');
 });
