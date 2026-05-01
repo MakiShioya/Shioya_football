@@ -1,7 +1,5 @@
-// 取得したばかりのトークンをここに設定します
 const API_TOKEN = '998d25444615428e83885e7579e83568';
 
-// 日本人選手が所属する主要なチームのリスト（必要に応じてIDを追加できます）
 const TARGET_TEAMS = [
     { id: 1049, name: "久保 建英 / レアル・ソシエダ" },
     { id: 397,  name: "三笘 薫 / ブライトン" },
@@ -16,20 +14,25 @@ async function loadMatches() {
     const container = document.getElementById('match-list');
     
     try {
-        // 全ての試合予定を取得
-        const response = await fetch('https://api.football-data.org/v4/matches', {
-            headers: { 'X-Auth-Token': API_TOKEN }
+        // --- 修正箇所：CORS回避のために allorigins プロキシを経由させる ---
+        const targetUrl = 'https://api.football-data.org/v4/matches';
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+
+        const response = await fetch(proxyUrl, {
+            headers: { 
+                // alloriginsを使う場合、ヘッダーの扱いが変わるため一旦ここでは含めず、
+                // 本来はサーバーサイドで処理するのが理想的です。
+            }
         });
 
-        // メールにあった「レート制限」のチェック
-        if (response.status === 429) {
-            container.innerHTML = '<p>短時間に何度も読み込みすぎです。少し待ってから再開してください。</p>';
-            return;
-        }
-
-        const data = await response.json();
+        const result = await response.json();
+        // alloriginsは結果を文字列として返すのでパースが必要
+        const data = JSON.parse(result.contents);
         
-        // TARGET_TEAMS に含まれるチームの試合だけを抽出
+        // もしAPIキーが必要なデータ（試合一覧など）を直接叩く場合は、
+        // プロキシサービスを通してもAPIキーの認証で弾かれることがあります。
+        // その場合は、簡単なNode.jsサーバーをRenderに立てるのが「正解」になります。
+
         const matches = data.matches.filter(match => 
             TARGET_TEAMS.some(team => team.id === match.homeTeam.id || team.id === match.awayTeam.id)
         );
@@ -39,12 +42,10 @@ async function loadMatches() {
             return;
         }
 
-        // 画面に表示するHTMLを生成
         container.innerHTML = matches.map(match => {
             const matchDate = new Date(match.utcDate).toLocaleString('ja-JP', {
                 month: 'short', day: 'numeric', weekday: 'short', hour: '2-digit', minute: '2-digit'
             });
-            
             return `
                 <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 8px;">
                     <div style="font-size: 0.8em; color: #666;">${matchDate}</div>
@@ -54,7 +55,7 @@ async function loadMatches() {
         }).join('');
 
     } catch (error) {
-        container.innerHTML = '<p>データの取得に失敗しました。インターネット接続を確認してください。</p>';
+        container.innerHTML = '<p>データの取得に失敗しました。CORS制限またはAPIの仕様により、Node.js等のサーバーが必要な可能性があります。</p>';
         console.error('Error:', error);
     }
 }
