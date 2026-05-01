@@ -1,4 +1,3 @@
-// チーム名を「完全一致」で指定します
 const TARGET_TEAMS = [
     // Premier League (England)
     "Brighton", "Liverpool", "Crystal Palace", "Leeds",
@@ -28,23 +27,11 @@ async function loadMatches() {
 
         const matches = data.response.matches;
 
-        // 【デバッグ用】取得した全チーム名をコンソールに出力して「正解」を確認します
-        console.log("--- APIから届いた全チーム名を確認中 ---");
-        matches.forEach(m => {
-            console.log(`[Home] "${m.home.name}" vs [Away] "${m.away.name}"`);
-        });
-
-        // 判定ロジックを「部分一致」かつ「大文字小文字を無視」に強化
-        const filteredMatches = matches.filter(match => {
-            const home = match.home.name.toLowerCase();
-            const away = match.away.name.toLowerCase();
-            
-            // TARGET_TEAMSのいずれかの名前が、チーム名の中に含まれているか判定
-            return TARGET_TEAMS.some(target => {
-                const t = target.toLowerCase();
-                return home.includes(t) || away.includes(t);
-            });
-        });
+        // 部分一致(includes)ではなく完全一致(===)で判定
+        const filteredMatches = matches.filter(match => 
+            TARGET_TEAMS.includes(match.home.name) || 
+            TARGET_TEAMS.includes(match.away.name)
+        );
 
         if (filteredMatches.length === 0) {
             container.innerHTML = '<p style="text-align:center; color: #666; margin-top: 50px;">本日、注目チームの試合予定はありません。</p>';
@@ -53,6 +40,7 @@ async function loadMatches() {
 
         container.innerHTML = filteredMatches.map(match => {
             const isFinished = match.status.finished;
+            
             return `
                 <div style="border: 1px solid #eee; padding: 25px; margin-bottom: 20px; border-radius: 16px; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
