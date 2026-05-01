@@ -413,6 +413,8 @@ async function loadMatches() {
     const container = document.getElementById('match-list');
     const leagueFilter = document.getElementById('league-filter');
     const japaneseFilter = document.getElementById('japanese-filter'); // 追加
+
+    container.innerHTML = '<p style="text-align: center; color: #ECDBBF; margin-top: 40px; font-size: 1.1rem; font-weight: bold;">試合情報を読み込み中...</p>';
     
     try {
         // ▼ 変更箇所：現在表示中の日付文字列を取得し、URLにくっつけて送信する
@@ -525,4 +527,10 @@ function renderMatches() {
     }).join('');
 }
 
-loadMatches();
+window.addEventListener('DOMContentLoaded', () => {
+    // 1. 画面が開かれた瞬間に「YYYY年MM月DD日」を今日の日付で上書きする
+    updateDateUI();
+    
+    // 2. その日付を使ってAPIから試合データを取得する
+    loadMatches();
+});
