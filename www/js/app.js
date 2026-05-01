@@ -505,18 +505,18 @@ function renderMatches() {
         const awayBadge = awayPlayers ? `<div style="font-size: 0.75em; color: white; background: #0046A7; padding: 3px 8px; border-radius: 10px; margin-top: 8px; display: inline-block;">🇯🇵 ${awayPlayers}</div>` : '';
 
         return `
-            <div style="border: 1px solid #eee; padding: 20px; margin: 15px; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                <div style="font-size: 0.8em; color: #999; margin-bottom: 10px; text-align: center;">${jstTimeStr} (日本時間)</div>
+            <div style="border: 3px solid #8b4513; padding: 15px; margin: 15px auto; width: 95%; max-width: 500px; border-radius: 12px; background: #fff8dc; box-shadow: 0 4px 6px rgba(0,0,0,0.3); color: #333;">
+                <div style="font-size: 0.85em; color: #666; margin-bottom: 10px; text-align: center; font-weight: bold;">${jstTimeStr} (日本時間)</div>
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div style="width: 40%; text-align: center;">
-                        <div style="font-weight: bold; font-size: 0.9em;">${displayHomeName}</div>
+                        <div style="font-weight: bold; font-size: 1rem;">${displayHomeName}</div>
                         ${homeBadge}
                     </div>
-                    <div style="width: 20%; text-align: center; font-size: 1.2em; font-weight: 900; margin-top: 5px;">
+                    <div style="width: 20%; text-align: center; font-size: 1.3em; font-weight: 900; margin-top: 5px; color: #432517;">
                         ${match.home.score} - ${match.away.score}
                     </div>
                     <div style="width: 40%; text-align: center;">
-                        <div style="font-weight: bold; font-size: 0.9em;">${displayAwayName}</div>
+                        <div style="font-weight: bold; font-size: 1rem;">${displayAwayName}</div>
                         ${awayBadge}
                     </div>
                 </div>
