@@ -9,7 +9,7 @@ const LEAGUE_MASTERS = {
         "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton", 
         "Chelsea", "Crystal Palace", "Everton", "Fulham", "Ipswich", 
         "Leicester", "Liverpool", "Manchester City", "Manchester United", 
-        "Newcastle United", "Nottingham Forest", "Southampton", "Tottenham Hotspur", 
+        "Newcastle United", "Nottingham Forest", "Tottenham Hotspur", 
         "West Ham United", "Wolverhampton"
     ],
     // 2. スペイン1部
@@ -46,7 +46,7 @@ const LEAGUE_MASTERS = {
         "Luton", "Middlesbrough", "Millwall", "Norwich", "Oxford", 
         "Plymouth", "Portsmouth", "Preston", "QPR", "Sheffield United", 
         "Sheffield Wednesday", "Stoke", "Sunderland", "Swansea", "Watford", 
-        "West Bromwich Albion", "Bristol City", "Hull City", "Cardiff"
+        "West Bromwich Albion", "Bristol City", "Hull City", "Southampton", "Cardiff"
     ],
     // 7. ベルギー1部
     "belgium": [
