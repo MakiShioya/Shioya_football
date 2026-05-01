@@ -12,24 +12,28 @@ app.use(express.static('www'));
 const API_TOKEN = '998d25444615428e83885e7579e83568';
 
 // 自分のサーバー内に「/api/matches」という窓口を作る
+// テスト用の窓口
 app.get('/api/matches', async (req, res) => {
-    console.log('1. /api/matches へのアクセスがありました');
+    console.log('1. テスト通信を開始します（JSONPlaceholderへ）');
     try {
-        console.log('2. football-data.org へのデータ要求を開始します');
-        const response = await axios.get('https://api.football-data.org/v4/matches', {
-            headers: { 'X-Auth-Token': API_TOKEN },
-            timeout: 5000 // 5秒で応答がなければ強制終了させる
+        console.log('2. 外部サーバーへのリクエストを送ります');
+        // 公開されているテスト用APIを叩きます
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts/1', {
+            timeout: 5000 
         });
-        console.log('3. football-data.org からのデータ取得に成功しました');
-        res.json(response.data);
+        console.log('3. 通信成功！データを受信しました');
+        res.json({
+            status: "Success",
+            message: "Renderからの外部通信は正常です！",
+            data: response.data
+        });
     } catch (error) {
-        console.log('3. エラーが発生しました: ' + error.message);
-        if (error.response) {
-            console.log('エラー詳細ステータス: ' + error.response.status);
-        } else if (error.request) {
-            console.log('エラー詳細: 相手サーバーからの応答が全くありません（ブロック等の可能性）');
-        }
-        res.status(500).json({ error: 'API取得失敗' });
+        console.log('3. 通信失敗: ' + error.message);
+        res.status(500).json({ 
+            status: "Failed",
+            message: "外部への通信ができませんでした",
+            error: error.message 
+        });
     }
 });
 
