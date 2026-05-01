@@ -15,9 +15,13 @@ app.get('/api/matches', async (req, res) => {
     try {
         console.log('1. /api/matches へのアクセスがありました');
         
-        // 正しいと思われるエンドポイント「football-get-matches-by-date」に修正
+        // フロントエンドから送られてきた日付を受け取る
+        // 万が一送られてこなかった場合のデフォルト値として一旦 '20260501' を設定
+        const targetDate = req.query.date || '20260501';
+        console.log(`対象日付: ${targetDate} のデータを取得します`);
+        
         const response = await axios.get('https://free-api-live-football-data.p.rapidapi.com/football-get-matches-by-date', {
-            params: { date: '20260501' }, // 2026年5月1日の試合を取得
+            params: { date: targetDate }, // 固定値から変数に変更
             headers: {
                 'x-rapidapi-key': RAPID_API_KEY,
                 'x-rapidapi-host': RAPID_API_HOST
