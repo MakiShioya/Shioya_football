@@ -17,12 +17,18 @@ app.get('/api/matches', async (req, res) => {
     try {
         console.log('2. football-data.org へのデータ要求を開始します');
         const response = await axios.get('https://api.football-data.org/v4/matches', {
-            headers: { 'X-Auth-Token': API_TOKEN }
+            headers: { 'X-Auth-Token': API_TOKEN },
+            timeout: 5000 // 5秒で応答がなければ強制終了させる
         });
         console.log('3. football-data.org からのデータ取得に成功しました');
         res.json(response.data);
     } catch (error) {
         console.log('3. エラーが発生しました: ' + error.message);
+        if (error.response) {
+            console.log('エラー詳細ステータス: ' + error.response.status);
+        } else if (error.request) {
+            console.log('エラー詳細: 相手サーバーからの応答が全くありません（ブロック等の可能性）');
+        }
         res.status(500).json({ error: 'API取得失敗' });
     }
 });
