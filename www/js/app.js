@@ -89,11 +89,11 @@ const JAPANESE_PLAYERS = {
     "Reims": ["中村敬斗"],
     "Bayern München": ["伊藤洋輝"],
     "Eintracht Frankfurt": ["堂安律"],
-    "Borussia Mönchengladbach": ["町野修斗, 高井幸太"],
+    "Borussia Mönchengladbach": ["町野修斗", "高井幸太"],
     "Sporting CP": ["守田英正"],
     "Parma": ["鈴木彩艶"],
     "Feyenoord": ["上田綺世"],
-    "Ajax": ["冨安健洋, 板倉滉"],
+    "Ajax": ["冨安健洋", "板倉滉"],
     "NEC Nijmegen": ["小川航基", "佐野航大"]
     // Jリーグを「日本人所属」として出す場合は、Jリーグの全チームをここに定義するか、
     // 後述のフィルターロジックでJリーグを特別扱いする必要があります。
