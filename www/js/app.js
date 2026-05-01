@@ -393,6 +393,11 @@ async function loadMatches() {
         }
 
         allMatches = data.response.matches;
+        if (allMatches && allMatches.length > 0) {
+            console.log("◆1試合目の全データ:", JSON.stringify(allMatches[0], null, 2));
+        } else {
+            console.log("◆現在、allMatchesが空です（試合がありません）");
+        }
 
         // リスナーの登録（切り替え時に再描画されるようにする）
         leagueFilter.addEventListener('change', renderMatches);
