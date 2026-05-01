@@ -80,25 +80,73 @@ const LEAGUE_MASTERS = {
 
 // ▼▼ 日本人選手マスターデータ ▼▼
 
+// ▼▼ 日本人選手マスターデータ（提供データからの完全抽出版） ▼▼
 const JAPANESE_PLAYERS = {
-    "Brighton": ["三笘薫"],
+    // イングランド1部・2部
+    "Crystal Palace": ["鎌田大地"],
     "Liverpool": ["遠藤航"],
-    
+    "Brighton": ["三笘薫"],
+    "Southampton": ["松木玖生"],
+    "Leeds": ["田中碧"],
+    "Blackburn": ["大橋祐紀", "森下龍矢"],
+    "Coventry": ["坂元達裕"],
+    "Hull City": ["平河悠"],
+    "QPR": ["斉藤光毅"],
+    "Stoke": ["瀬古樹"],
+    "Birmingham": ["岩田智輝", "藤本寛也", "古橋亨梧"],
+
+    // スペイン1部・2部
     "Real Sociedad": ["久保建英"],
-    "Monaco": ["南野拓実"],
-    "Reims": ["中村敬斗"],
+    "Mallorca": ["浅野拓磨"],
+    "Las Palmas": ["宮代大聖"],
+    "Real Sociedad B": ["喜多壱也"],
+
+    // ドイツ1部・2部
     "Bayern München": ["伊藤洋輝"],
-    "Eintracht Frankfurt": ["堂安律"],
-    "Borussia Mönchengladbach": ["町野修斗", "高井幸太"],
-    "Sporting CP": ["守田英正"],
+    "Freiburg": ["鈴木唯人"],
+    "Werder Bremen": ["菅原由勢"],
+    "Eintracht Frankfurt": ["小杉啓太", "堂安律"],
+    "Hoffenheim": ["町田浩樹"],
+    "Mainz 05": ["川崎颯太", "佐野海舟"],
+    "Borussia Mönchengladbach": ["高井幸大", "町野修斗"],
+    "St. Pauli": ["ニック・シュミット", "安藤智哉", "原大智", "藤田譲瑠チマ"],
+    "Wolfsburg": ["塩貝健人"],
+    "Bochum": ["三好康児"],
+    "Fortuna Düsseldorf": ["アペルカンプ真大", "田中聡"],
+    "Darmstadt": ["秋山裕紀", "古川陽介"],
+    "Hannover": ["松田隼風", "横田大祐"],
+    "Karlsruhe": ["福田師王"],
+    "Preußen Münster": ["山田新"],
+
+    // イタリア1部
     "Parma": ["鈴木彩艶"],
-    "Feyenoord": ["上田綺世"],
-    "Ajax": ["冨安健洋", "板倉滉"],
-    "NEC Nijmegen": ["小川航基", "佐野航大"]
-    // Jリーグを「日本人所属」として出す場合は、Jリーグの全チームをここに定義するか、
-    // 後述のフィルターロジックでJリーグを特別扱いする必要があります。
+
+    // フランス1部
+    "Monaco": ["南野拓実"],
+    "Le Havre": ["瀬古歩夢"],
+
+    // ベルギー1部
+    "OH Leuven": ["明本考浩", "大南拓磨"],
+    "Westerlo": ["木村誠二", "齋藤俊輔", "坂本一彩"],
+    "Genk": ["伊東純也", "横山歩夢", "吉永夢希"],
+    "Sint-Truiden": ["伊藤涼太郎", "小久保玲央ブライアン", "後藤啓介", "新川志音", "谷口彰悟", "畑大雅", "松澤海斗", "山本理仁"],
+    "Gent": ["伊藤敦樹", "橋岡大樹"],
+    "Antwerp": ["綱島悠斗", "野沢大志ブランドン"],
+
+    // オランダ1部
+    "Ajax": ["板倉滉", "冨安健洋"],
+    "NEC Nijmegen": ["小川航基", "佐野航大"],
+    "Feyenoord": ["上田綺世", "渡辺剛"],
+    "AZ Alkmaar": ["市原吏音", "毎熊晟矢"],
+    "Sparta Rotterdam": ["三戸舜介"],
+
+    // ポルトガル1部
+    "Sporting CP": ["守田英正"],
+    "Arouca": ["福井太智"],
+
+    // スコットランド（10リーグ外）
+    "Celtic": ["旗手怜央", "前田大然"]
 };
-// ▲▲ 新規追加ここまで ▲▲
 
 let allMatches = [];
 
