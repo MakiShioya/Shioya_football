@@ -80,7 +80,231 @@ const LEAGUE_MASTERS = {
         "Preußen Münster", "Real Sociedad B", "Celtic"
     ]
 };
+// ▼▼ チーム名表示変換辞書 ▼▼
+const TEAM_DISPLAYS = {
+    // 1. イングランド1部 (premier_league)
+    "Arsenal": "ARS アーセナル",
+    "Aston Villa": "AVL アストン・ヴィラ",
+    "Bournemouth": "BOU ボーンマス",
+    "Brentford": "BRE ブレントフォード",
+    "Brighton": "BHA ブライトン",
+    "Chelsea": "CHE チェルシー",
+    "Crystal Palace": "CRY クリスタル・パレス",
+    "Everton": "EVE エヴァートン",
+    "Fulham": "FUL フラム",
+    "Ipswich": "IPS イプスウィッチ",
+    "Leicester": "LEI レスター",
+    "Liverpool": "LIV リヴァプール",
+    "Manchester City": "MCI マンチェスター・シティ",
+    "Manchester United": "MUN マンチェスター・ユナイテッド",
+    "Newcastle United": "NEW ニューカッスル",
+    "Nottingham Forest": "NFO ノッティンガム・フォレスト",
+    "Tottenham Hotspur": "TOT トッテナム",
+    "West Ham United": "WHU ウェストハム",
+    "Wolverhampton": "WOL ウルヴス",
 
+    // 2. スペイン1部 (laliga)
+    "Alaves": "ALA アラベス",
+    "Athletic Club": "ATH アスレティック・ビルバオ",
+    "Atletico Madrid": "ATM アトレティコ・マドリード",
+    "Barcelona": "BAR バルセロナ",
+    "Celta Vigo": "CEL セルタ",
+    "Espanyol": "ESP エスパニョール",
+    "Getafe": "GET ヘタフェ",
+    "Gironina": "GIR ジローナ",
+    "Las Palmas": "LPA ラス・パルマス",
+    "Leganes": "LEG レガネス",
+    "Mallorca": "MLL マジョルカ",
+    "Osasuna": "OSA オサスナ",
+    "Rayo Vallecano": "RAY ラージョ・バジェカーノ",
+    "Real Betis": "BET ベティス",
+    "Real Madrid": "RMA レアル・マドリード",
+    "Real Sociedad": "RSO レアル・ソシエダ",
+    "Sevilla": "SEV セビージャ",
+    "Valencia": "VAL バレンシア",
+    "Valladolid": "VLL バジャドリード",
+    "Villarreal": "VIL ビジャレアル",
+
+    // 3. ドイツ1部 (bundesliga)
+    "Bayern München": "FCB バイエルン・ミュンヘン",
+    "Borussia Dortmund": "BVB ドルトムント",
+    "RB Leipzig": "RBL RBライプツィヒ",
+    "VfB Stuttgart": "VFB シュツットガルト",
+    "Hoffenheim": "TSG ホッフェンハイム",
+    "Bayer Leverkusen": "B04 レヴァークーゼン",
+    "Eintracht Frankfurt": "SGE フランクフルト",
+    "Freiburg": "SCF フライブルク",
+    "Augsburg": "FCA アウクスブルク",
+    "Mainz 05": "M05 マインツ",
+    "Borussia Mönchengladbach": "BMG ボルシアMG",
+    "Werder Bremen": "SVW ブレーメン",
+    "Union Berlin": "FCU ウニオン・ベルリン",
+    "1. FC Köln": "KOE ケルン",
+    "Hamburger SV": "HSV ハンブルガーSV",
+    "St. Pauli": "STP ザンクトパウリ",
+    "Wolfsburg": "WOB ヴォルフスブルク",
+    "FC Heidenheim": "FCH ハイデンハイム",
+
+    // 4. イタリア1部 (serie_a)
+    "Atalanta": "ATA アタランタ",
+    "Bologna": "BOL ボローニャ",
+    "Cagliari": "CAG カリアリ",
+    "Como": "COM コモ",
+    "Empoli": "EMP エンポリ",
+    "Fiorentina": "FIO フィオレンティーナ",
+    "Genoa": "GEN ジェノア",
+    "Inter": "INT インテル",
+    "Juventus": "JUV ユヴェントス",
+    "Lazio": "LAZ ラツィオ",
+    "Lecce": "LEC レッチェ",
+    "Milan": "MIL ミラン",
+    "Monza": "MON モンツァ",
+    "Napoli": "NAP ナポリ",
+    "Parma": "PAR パルマ",
+    "Roma": "ROM ローマ",
+    "Torino": "TOR トリノ",
+    "Udinese": "UDI ウディネーゼ",
+    "Venezia": "VEN ヴェネツィア",
+    "Verona": "VER ヴェローナ",
+
+    // 5. フランス1部 (ligue_1)
+    "Angers": "ANG アンジェ",
+    "Auxerre": "AUX オセール",
+    "Brest": "BRE ブレスト",
+    "Le Havre": "HAC ル・アーヴル",
+    "Lens": "RCL ランス",
+    "Lille": "LIL リール",
+    "Lyon": "OL リヨン",
+    "Marseille": "OM マルセイユ",
+    "Monaco": "ASM モナコ",
+    "Montpellier": "MHS モンペリエ",
+    "Nantes": "FCN ナント",
+    "Nice": "OGC ニース",
+    "PSG": "PSG パリ・サンジェルマン",
+    "Reims": "SDR スタッド・ランス",
+    "Rennes": "REN レンヌ",
+    "Saint-Etienne": "STE サンテティエンヌ",
+    "Strasbourg": "STR ストラスブール",
+    "Toulouse": "TFC トゥールーズ",
+
+    // 6. イングランド2部 (championship)
+    "Blackburn": "BLA ブラックバーン",
+    "Burnley": "BUR バーンリー",
+    "Coventry": "COV コベントリー",
+    "Derby": "DER ダービー",
+    "Leeds": "LEE リーズ",
+    "Luton": "LUT ルートン",
+    "Middlesbrough": "MID ミドルズブラ",
+    "Millwall": "MIL ミルウォール",
+    "Norwich": "NOR ノリッジ",
+    "Oxford": "OXF オックスフォード",
+    "Plymouth": "PLY プリマス",
+    "Portsmouth": "POR ポーツマス",
+    "Preston": "PNE プレストン",
+    "QPR": "QPR QPR",
+    "Sheffield United": "SHU シェフィールド・U",
+    "Sheffield Wednesday": "SHW シェフィールド・W",
+    "Stoke": "STK ストーク",
+    "Sunderland": "SUN サンダーランド",
+    "Swansea": "SWA スウォンジー",
+    "Watford": "WAT ワトフォード",
+    "West Bromwich Albion": "WBA WBA",
+    "Bristol City": "BRC ブリストル・C",
+    "Hull City": "HUL ハル・C",
+    "Southampton": "SOU サウサンプトン",
+    "Cardiff": "CAR カーディフ",
+    "Birmingham": "BIR バーミンガム",
+
+    // 7. ベルギー1部 (belgium)
+    "Anderlecht": "AND アンデルレヒト",
+    "Antwerp": "ANT アントワープ",
+    "Cercle Brugge": "CER セルクル・ブルッヘ",
+    "Charleroi": "CHA シャルルロワ",
+    "Club Brugge": "CLU クラブ・ブルッヘ",
+    "Dender": "DEN デンデル",
+    "Genk": "GNK ヘンク",
+    "Gent": "GNT ヘント",
+    "Kortrijk": "KVK コルトレイク",
+    "KV Mechelen": "KVM メヘレン",
+    "OH Leuven": "OHL ルーヴェン",
+    "Sint-Truiden": "STV シント＝トロイデン",
+    "Standard Liege": "STA スタンダール",
+    "Union SG": "USG サン・ジロワーズ",
+    "Westerlo": "WES ウェステルロー",
+    "Zulte Waregem": "ZWA ズルテ・ワレヘム",
+
+    // 8. ポルトガル1部 (portugal)
+    "Benfica": "SLB ベンフィカ",
+    "Boavista": "BOA ボアヴィスタ",
+    "Braga": "SCB ブラガ",
+    "Casa Pia": "CAS カーザ・ピア",
+    "Estoril": "EST エストリル",
+    "Estrela da Amadora": "EST エストレラ",
+    "Famalicao": "FAM ファマリカン",
+    "Farense": "FAR ファレンセ",
+    "FC Porto": "FCP ポルト",
+    "Gil Vicente": "GIL ジル・ヴィセンテ",
+    "Moreirense": "MOR モレイレンセ",
+    "Nacional": "NAC ナシオナル",
+    "Rio Ave": "RAV リオ・アヴェ",
+    "Santa Clara": "SCL サンタクララ",
+    "Sporting CP": "SCP スポルティング",
+    "Vitoria de Guimaraes": "VSC ヴィトーリア",
+    "AVS": "AVS AVS",
+    "Arouca": "ARO アロウカ",
+
+    // 9. オランダ1部 (netherlands)
+    "Ajax": "AJA アヤックス",
+    "Almere City": "ALM アルメレ・シティ",
+    "AZ Alkmaar": "AZ AZ",
+    "Feyenoord": "FEY フェイエノールト",
+    "Fortuna Sittard": "FOR フォルトゥナ",
+    "Go Ahead Eagles": "GAE ゴーアヘッド",
+    "Groningen": "GRO フローニンゲン",
+    "Heerenveen": "HEE ヘーレンフェーン",
+    "Heracles": "HER ヘラクレス",
+    "NAC Breda": "NAC NACブレダ",
+    "NEC Nijmegen": "NEC NECナイメヘン",
+    "PEC Zwolle": "PEC PECズヴォレ",
+    "PSV Eindhoven": "PSV PSV",
+    "RKC Waalwijk": "RKC RKCワールワイク",
+    "Sparta Rotterdam": "SPA スパルタ・ロッテルダム",
+    "Twente": "TWE トゥウェンテ",
+    "Utrecht": "UTR ユトレヒト",
+    "Willem II": "WIL ヴィレムII",
+
+    // 10. 日本 J1リーグ (j_league)
+    "Albirex Niigata": "ALB アルビレックス新潟",
+    "Avispa Fukuoka": "AVI アビスパ福岡",
+    "Cerezo Osaka": "CER セレッソ大阪",
+    "Consadole Sapporo": "CON 北海道コンサドーレ札幌",
+    "FC Tokyo": "FCT FC東京",
+    "Gamba Osaka": "GAM ガンバ大阪",
+    "Jubilo Iwata": "JUB ジュビロ磐田",
+    "Kashima Antlers": "KAS 鹿島アントラーズ",
+    "Kashiwa Reysol": "KSW 柏レイソル",
+    "Kawasaki Frontale": "KAW 川崎フロンターレ",
+    "Kyoto Sanga": "KYO 京都サンガ",
+    "Machida Zelvia": "MAC 町田ゼルビア",
+    "Nagoya Grampus": "NAG 名古屋グランパス",
+    "Sagan Tosu": "SAG サガン鳥栖",
+    "Sanfrecce Hiroshima": "SAN サンフレッチェ広島",
+    "Shonan Bellmare": "SHO 湘南ベルマーレ",
+    "Tokyo Verdy": "VER 東京ヴェルディ",
+    "Urawa Red Diamonds": "URA 浦和レッズ",
+    "Vissel Kobe": "VIS ヴィッセル神戸",
+    "Yokohama F. Marinos": "YFM 横浜F・マリノス",
+
+    // その他・例外チーム (ex)
+    "Bochum": "BOC ボーフム",
+    "Fortuna Düsseldorf": "F95 デュッセルドルフ",
+    "Darmstadt": "SVD ダルムシュタット",
+    "Hannover": "H96 ハノーファー",
+    "Karlsruhe": "KSC カールスルーエ",
+    "Preußen Münster": "PRM P・ミュンスター",
+    "Real Sociedad B": "RSO レアル・ソシエダB",
+    "Celtic": "CEL セルティック"
+};
 
 // ▼▼ 日本人選手マスターデータ ▼▼
 
@@ -221,26 +445,29 @@ function renderMatches() {
 
     // 3. 画面への描画（選手名バッジの追加）
     container.innerHTML = filtered.map(match => {
-        // JAPANESE_PLAYERSに登録があれば名前を取得し、HTMLバッジ化する
         const homePlayers = JAPANESE_PLAYERS[match.home.name] ? JAPANESE_PLAYERS[match.home.name].join(', ') : '';
         const awayPlayers = JAPANESE_PLAYERS[match.away.name] ? JAPANESE_PLAYERS[match.away.name].join(', ') : '';
 
         const homeBadge = homePlayers ? `<div style="font-size: 0.75em; color: white; background: #0046A7; padding: 3px 8px; border-radius: 10px; margin-top: 8px; display: inline-block;">🇯🇵 ${homePlayers}</div>` : '';
         const awayBadge = awayPlayers ? `<div style="font-size: 0.75em; color: white; background: #0046A7; padding: 3px 8px; border-radius: 10px; margin-top: 8px; display: inline-block;">🇯🇵 ${awayPlayers}</div>` : '';
 
+        // ▼ 辞書に登録があれば変換し、なければ元の英語名を使う ▼
+        const displayHomeName = TEAM_DISPLAYS[match.home.name] || match.home.name;
+        const displayAwayName = TEAM_DISPLAYS[match.away.name] || match.away.name;
+
         return `
             <div style="border: 1px solid #eee; padding: 20px; margin: 15px; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                 <div style="font-size: 0.8em; color: #999; margin-bottom: 10px; text-align: center;">${match.time} (現地)</div>
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div style="width: 40%; text-align: center;">
-                        <div style="font-weight: bold;">${match.home.name}</div>
+                        <div style="font-weight: bold; font-size: 0.9em;">${displayHomeName}</div>
                         ${homeBadge}
                     </div>
                     <div style="width: 20%; text-align: center; font-size: 1.2em; font-weight: 900; margin-top: 5px;">
                         ${match.home.score} - ${match.away.score}
                     </div>
                     <div style="width: 40%; text-align: center;">
-                        <div style="font-weight: bold;">${match.away.name}</div>
+                        <div style="font-weight: bold; font-size: 0.9em;">${displayAwayName}</div>
                         ${awayBadge}
                     </div>
                 </div>
