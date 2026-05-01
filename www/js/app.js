@@ -1,11 +1,17 @@
-// 日本人選手が所属するチーム名（今回のAPIはIDが不明なため、名前で判定します）
+// チーム名を「完全一致」で指定します
 const TARGET_TEAMS = [
-    "Brighton",    // 三笘
-    "Monaco",      // 南野
-    "Sociedad",    // 久保
-    "Arsenal",     // 冨安
-    "Liverpool",   // 遠藤
-    "Freiburg"     // 堂安
+    // Premier League (England)
+    "Brighton", "Liverpool", "Crystal Palace", "Leeds",
+    // La Liga (Spain)
+    "Real Sociedad", "Mallorca",
+    // Bundesliga (Germany)
+    "Bayern Munich", "Eintracht Frankfurt", "Mainz 05", 
+    "Borussia Monchengladbach", "SC Freiburg", "TSG Hoffenheim", 
+    "FC St. Pauli", "Werder Bremen",
+    // Ligue 1 (France)
+    "Monaco", "Reims",
+    // Serie A (Italy)
+    "Parma"
 ];
 
 async function loadMatches() {
@@ -15,47 +21,59 @@ async function loadMatches() {
         const response = await fetch('/api/matches');
         const data = await response.json();
         
-        // 階層が data.response.matches になっているので、そこを取り出す
+        if (!data.status || !data.response.matches) {
+            container.innerHTML = '<p>試合データがありません。</p>';
+            return;
+        }
+
         const matches = data.response.matches;
 
-        // ターゲットチームが含まれる試合を抽出（大文字小文字を区別せず判定）
+        // 部分一致(includes)ではなく完全一致(===)で判定
         const filteredMatches = matches.filter(match => 
-            TARGET_TEAMS.some(name => 
-                match.home.name.includes(name) || match.away.name.includes(name)
-            )
+            TARGET_TEAMS.includes(match.home.name) || 
+            TARGET_TEAMS.includes(match.away.name)
         );
 
         if (filteredMatches.length === 0) {
-            container.innerHTML = '<p style="text-align:center; color: #666;">直近の注目試合は見つかりませんでした。</p>';
+            container.innerHTML = '<p style="text-align:center; color: #666; margin-top: 50px;">本日、注目チームの試合予定はありません。</p>';
             return;
         }
 
         container.innerHTML = filteredMatches.map(match => {
-            // APIの時刻形式 "30.04.2026 21:00" を利用
-            const matchTime = match.time; 
+            const isFinished = match.status.finished;
             
             return `
-                <div style="border: 1px solid #eee; padding: 20px; margin-bottom: 15px; border-radius: 12px; background: white; shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                    <div style="font-size: 0.85em; color: #007bff; font-weight: bold; margin-bottom: 8px;">
-                        試合開始: ${matchTime} (現地時間)
+                <div style="border: 1px solid #eee; padding: 25px; margin-bottom: 20px; border-radius: 16px; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <span style="font-size: 0.8em; background: #f0f0f0; padding: 4px 10px; border-radius: 20px; color: #555;">
+                            ${match.time} (現地)
+                        </span>
+                        ${isFinished ? '<span style="font-size: 0.8em; color: #dc3545; font-weight: bold;">試合終了</span>' : ''}
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div style="flex: 1; text-align: center; font-weight: bold;">${match.home.name}</div>
-                        <div style="padding: 0 15px; color: #999;">vs</div>
-                        <div style="flex: 1; text-align: center; font-weight: bold;">${match.away.name}</div>
-                    </div>
-                    ${match.status.started ? `
-                        <div style="text-align: center; margin-top: 10px; color: #dc3545; font-weight: bold;">
-                            SCORE: ${match.home.score} - ${match.away.score}
+                    
+                    <div style="display: flex; justify-content: space-around; align-items: center;">
+                        <div style="width: 40%; text-align: center;">
+                            <div style="font-weight: bold; font-size: 1.1em;">${match.home.name}</div>
                         </div>
-                    ` : ''}
+                        
+                        <div style="width: 20%; text-align: center;">
+                            <div style="font-size: 0.8em; color: #999; margin-bottom: 5px;">VS</div>
+                            <div style="font-size: 1.5em; font-weight: 900; color: #333;">
+                                ${match.home.score} - ${match.away.score}
+                            </div>
+                        </div>
+                        
+                        <div style="width: 40%; text-align: center;">
+                            <div style="font-weight: bold; font-size: 1.1em;">${match.away.name}</div>
+                        </div>
+                    </div>
                 </div>
             `;
         }).join('');
 
     } catch (error) {
         console.error('Display Error:', error);
-        container.innerHTML = '<p>表示処理でエラーが発生しました。</p>';
+        container.innerHTML = '<p>データの表示中にエラーが発生しました。</p>';
     }
 }
 
